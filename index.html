@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эффективное Делегирование и Тайм-Менеджмент | ФНС РФ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        }
+        .section-divider {
+            border-bottom: 2px dashed #e5e7eb;
+            margin: 2rem 0;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: #3b82f6;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #1e40af;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion.active .accordion-content {
+            max-height: 500px;
+        }
+        .floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800">
+    <!-- Floating Register Button -->
+    <div class="floating-btn">
+        <button onclick="toggleModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all transform hover:scale-105 flex items-center">
+            <i class="fas fa-pencil-alt mr-2"></i> Записаться
+        </button>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800">Регистрация на мастер-класс</h3>
+                <button onclick="toggleModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="name">ФИО</label>
+                    <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="email">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="department">Подразделение</label>
+                    <input type="text" id="department" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2" for="expectations">Ваши ожидания от мастер-класса</label>
+                    <textarea id="expectations" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+                    Отправить заявку
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-16 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-2/3 mb-8 md:mb-0">
+                    <div class="inline-block bg-blue-500 text-white text-sm font-semibold px-3 py-1 rounded-full mb-4">
+                        Онлайн-мастер-класс
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Эффективное Делегирование и Тайм-Менеджмент для сотрудников ФНС РФ</h1>
+                    <p class="text-xl text-blue-100 mb-6">Практические инструменты для повышения личной и командной эффективности</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex items-center">
+                            <i class="far fa-clock text-blue-300 mr-2 text-xl"></i>
+                            <span>3 часа</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-laptop text-blue-300 mr-2 text-xl"></i>
+                            <span>Онлайн-формат</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-users text-blue-300 mr-2 text-xl"></i>
+                            <span>Интерактивное участие</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="bg-white p-2 rounded-lg shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1579389083078-4e7018379f7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Time Management" class="w-full h-auto rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 md:px-8 py-12">
+        <!-- Target Audience -->
+        <section class="mb-16">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-2">Для кого этот мастер-класс?</h2>
+                <p class="text-gray-700">Менеджеры среднего звена ФНС РФ с базовыми знаниями в менеджменте, нуждающиеся в практических инструментах для делегирования и управления временем.</p>
+            </div>
+        </section>
+
+        <!-- Learning Goals -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Цели обучения (SMART)</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-bullseye text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Конкретные и измеримые</h3>
+                    </div>
+                    <p class="text-gray-600">К концу мастер-класса участники смогут четко определять задачи, которые можно делегировать, и выбирать подходящих исполнителей.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Достижимые и релевантные</h3>
+                    </div>
+                    <p class="text-gray-600">Участники освоят минимум 3 практических техники тайм-менеджмента, которые смогут применить в работе уже на следующий день.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Измеримый результат</h3>
+                    </div>
+                    <p class="text-gray-600">Повышение эффективности управления временем и делегирования задач у участников на 30-40%.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-users text-yellow-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Ограниченные по времени</h3>
+                    </div>
+                    <p class="text-gray-600">Создание условий для активного взаимодействия и обмена опытом в процессе онлайн-занятия (3 часа).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Structure -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Программа мастер-класса</h2>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="grid grid-cols-12 bg-blue-600 text-white font-bold py-3 px-4">
+                    <div class="col-span-3">Время</div>
+                    <div class="col-span-5">Блок / Модуль</div>
+                    <div class="col-span-4">Содержание и активность</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">0:00–0:15</div>
+                    <div class="col-span-5">Введение и знакомство</div>
+                    <div class="col-span-4 text-gray-600">Цели, программа, опрос ожиданий участников</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">0:15–0:45</div>
+                    <div class="col-span-5">Блок 1: Основы эффективного делегирования</div>
+                    <div class="col-span-4 text-gray-600">Теория, принципы, интерактивный опрос</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">0:45–1:15</div>
+                    <div class="col-span-5">Практика 1: Анализ задач и выбор исполнителей</div>
+                    <div class="col-span-4 text-gray-600">Разбор кейсов, групповое задание</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">1:15–1:30</div>
+                    <div class="col-span-5">Перерыв и Q&A</div>
+                    <div class="col-span-4 text-gray-600">Ответы на вопросы, обсуждение</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">1:30–2:00</div>
+                    <div class="col-span-5">Блок 2: Тайм-менеджмент для руководителя</div>
+                    <div class="col-span-4 text-gray-600">Ключевые методы, инструменты, примеры из IT-сферы</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">2:00–2:30</div>
+                    <div class="col-span-5">Практика 2: Планирование и приоритизация</div>
+                    <div class="col-span-4 text-gray-600">Индивидуальное задание с шаблонами, обсуждение</div>
+                </div>
+                
+                <div class="grid grid-cols-12 border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">2:30–2:50</div>
+                    <div class="col-span-5">Интерактив: Брейнсторминг и обмен опытом</div>
+                    <div class="col-span-4 text-gray-600">Групповая дискуссия, обмен успешными стратегиями</div>
+                </div>
+                
+                <div class="grid grid-cols-12 py-3 px-4 hover:bg-blue-50">
+                    <div class="col-span-3 font-medium">2:50–3:00</div>
+                    <div class="col-span-5">Итоги и обратная связь</div>
+                    <div class="col-span-4 text-gray-600">Подведение итогов, рекомендации, домашнее задание</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Concepts -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Ключевые теоретические положения</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Delegation -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-share-alt text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Делегирование</h3>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-medium text-blue-700 mb-2">Определение:</h4>
+                        <p class="text-gray-600">Частичная передача полномочий и ответственности сотрудникам для повышения эффективности.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-medium text-blue-700 mb-2">Принципы:</h4>
+                        <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                            <li>Выбор задач</li>
+                            <li>Готовность исполнителя</li>
+                            <li>Четкие цели и сроки</li>
+                            <li>Баланс контроля и доверия</li>
+                            <li>Обратная связь</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-medium text-blue-700 mb-2">Виды делегирования:</h4>
+                        <p class="text-gray-600">Разовое vs постоянное (делегирование обязанностей).</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium text-blue-700 mb-2">Ошибки и как их избегать:</h4>
+                        <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                            <li>Нечеткие задачи</li>
+                            <li>Отсутствие контроля</li>
+                            <li>Недостаток мотивации</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Time Management -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-clock text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Тайм-менеджмент</h3>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-medium text-green-700 mb-2">Основные методы:</h4>
+                        <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                            <li>Планирование</li>
+                            <li>Приоритизация</li>
+                            <li>Фиксирование задач и времени</li>
+                            <li>Техника Pomodoro</li>
+                            <li>Матрица Эйзенхауэра</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-medium text-green-700 mb-2">Инструменты для руководителей:</h4>
+                        <p class="text-gray-600">Делегирование как ключевой инструмент освобождения времени для стратегических задач.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium text-green-700 mb-2">Особенности управления временем в IT-среде:</h4>
+                        <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                            <li>Гибкость</li>
+                            <li>Работа с дедлайнами</li>
+                            <li>Управление многозадачностью</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Exercises -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Практические упражнения</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Block 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700">Блок 1 — Практика делегирования</h3>
+                    
+                    <div class="timeline-item">
+                        <h4 class="font-medium mb-1">Анализ реальных рабочих задач</h4>
+                        <p class="text-gray-600">Определить, какие задачи можно делегировать из вашей текущей работы.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="font-medium mb-1">Групповое задание</h4>
+                        <p class="text-gray-600">Распределить задачи между виртуальными сотрудниками с разным уровнем компетенций.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="font-medium mb-1">Обсуждение критериев</h4>
+                        <p class="text-gray-600">Формулировка SMART-задач для делегирования.</p>
+                    </div>
+                </div>
+                
+                <!-- Block 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-500">
+                    <h3 class="text-xl font-semibold mb-4 text-green-700">Блок 2 — Практика тайм-менеджмента</h3>
+                    
+                    <div class="timeline-item">
+                        <h4 class="font-medium mb-1">Индивидуальное задание</h4>
+                        <p class="text-gray-600">Составить план рабочего дня с учетом приоритетов и делегирования.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="font-medium mb-1">Использование шаблонов</h4>
+                        <p class="text-gray-600">Планирование и контроль выполнения задач с готовыми шаблонами.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="font-medium mb-1">Брейнсторминг</h4>
+                        <p class="text-gray-600">Обмен советами по управлению временем в условиях ФНС.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Elements -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Интерактивные элементы</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-poll text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Опросы в реальном времени</h3>
+                    <p class="text-gray-600">Проверка понимания материала через интерактивные опросы.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-comments text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Групповые дискуссии</h3>
+                    <p class="text-gray-600">Обсуждение в breakout-комнатах для обмена опытом.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-comment-dots text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Обратная связь</h3>
+                    <p class="text-gray-600">Рекомендации от ведущего по результатам работы.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Необходимые ресурсы</h2>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="grid md:grid-cols-2 gap-6 p-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-blue-700">Шаблоны и чек-листы</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-file-alt text-blue-500 mt-1 mr-3"></i>
+                                <span>Шаблоны для делегирования задач (формат SMART)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-clipboard-check text-blue-500 mt-1 mr-3"></i>
+                                <span>Чек-листы для оценки готовности сотрудников</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-calendar-alt text-blue-500 mt-1 mr-3"></i>
+                                <span>Планировщик рабочего времени (дневной/недельный)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-700">Инструменты и литература</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-book text-green-500 mt-1 mr-3"></i>
+                                <span>Рекомендуемая литература по теме</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-link text-green-500 mt-1 mr-3"></i>
+                                <span>Онлайн-инструменты (Trello, Microsoft To Do)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-file-pdf text-green-500 mt-1 mr-3"></i>
+                                <span>Дополнительные материалы в PDF</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discussion Questions -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Вопросы для дискуссии</h2>
+            
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="flex items-start mb-4">
+                            <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                <i class="fas fa-question text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium mb-1">Какие задачи в вашей текущей работе вы можете делегировать прямо сейчас? Почему?</h3>
+                                <p class="text-gray-600 text-sm">Подумайте о рутинных и повторяющихся задачах</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-4">
+                            <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                <i class="fas fa-question text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium mb-1">Как определить, что сотрудник готов принять на себя новую ответственность?</h3>
+                                <p class="text-gray-600 text-sm">Какие критерии вы используете?</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                <i class="fas fa-question text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium mb-1">Какие основные препятствия мешают вам эффективно делегировать? Как их преодолеть?</h3>
+                                <p class="text-gray-600 text-sm">Страх потери контроля? Недостаток времени?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-start mb-4">
+                            <div class="bg-green-100 p-2 rounded-lg mr-4">
+                                <i class="fas fa-question text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium mb-1">Какие методы тайм-менеджмента вы уже используете, и какие хотели бы освоить?</h3>
+                                <p class="text-gray-600 text-sm">Матрица Эйзенхауэра? Pomodoro?</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-4">
+                            <div class="bg-green-100 p-2 rounded-lg mr-4">
+                                <i class="fas fa-question text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium mb-1">Как делегирование помогает освободить время для стратегических задач?</h3>
+                                <p class="text-gray-600 text-sm">Какие стратегические задачи требуют вашего внимания?</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-green-100 p-2 rounded-lg mr-4">
+                                <i class="fas fa-question text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium mb-1">Какие конкретные шаги вы сделаете после мастер-класса для улучшения управления временем?</h3>
+                                <p class="text-gray-600 text-sm">Будьте максимально конкретны</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Преимущества мастер-класса</h2>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-8 rounded-r-lg">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="flex items-start mb-6">
+                            <div class="bg-white p-2 rounded-lg shadow mr-4">
+                                <i class="fas fa-tools text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">Практические инструменты</h3>
+                                <p class="text-gray-700">Готовые шаблоны и техники, которые можно сразу применять в работе.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="bg-white p-2 rounded-lg shadow mr-4">
+                                <i class="fas fa-chart-line text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">Повышение продуктивности</h3>
+                                <p class="text-gray-700">Грамотное распределение задач и времени для вас и вашей команды.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-start mb-6">
+                            <div class="bg-white p-2 rounded-lg shadow mr-4">
+                                <i class="fas fa-exchange-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">Обмен опытом</h3>
+                                <p class="text-gray-700">Возможность обсудить кейсы с коллегами и получить обратную связь.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-white p-2 rounded-lg shadow mr-4">
+                                <i class="fas fa-user-tie text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">Развитие навыков</h3>
+                                <p class="text-gray-700">Управленческие компетенции, необходимые для карьерного роста.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Часто задаваемые вопросы</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="accordion bg-white rounded-xl shadow-md mb-4 overflow-hidden" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="font-semibold">Нужно ли готовиться к мастер-классу?</h3>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div class="accordion-content px-6 pb-0">
+                        <p class="text-gray-600 pb-6">Специальной подготовки не требуется, но будет полезно заранее подумать о задачах, которые вы хотели бы делегировать, и текущих проблемах с тайм-менеджментом.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion bg-white rounded-xl shadow-md mb-4 overflow-hidden" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="font-semibold">Будут ли доступны материалы после мастер-класса?</h3>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div class="accordion-content px-6 pb-0">
+                        <p class="text-gray-600 pb-6">Да, все участники получат запись мастер-класса, презентацию и дополнительные материалы в электронном виде.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion bg-white rounded-xl shadow-md mb-4 overflow-hidden" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="font-semibold">Как будет проходить интерактивная часть?</h3>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div class="accordion-content px-6 pb-0">
+                        <p class="text-gray-600 pb-6">Мы будем использовать платформу Zoom с breakout-комнатами для групповой работы, интерактивные опросы через Mentimeter и обсуждения в чате.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion bg-white rounded-xl shadow-md overflow-hidden" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="font-semibold">Можно ли получить сертификат об участии?</h3>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div class="accordion-content px-6 pb-0">
+                        <p class="text-gray-600 pb-6">Да, все участники, посетившие мастер-класс полностью, получат электронный сертификат.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="gradient-bg text-white rounded-xl p-8 md:p-12 text-center">
+            <h2 class="text-3xl font-bold mb-4">Готовы повысить свою эффективность?</h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">Присоединяйтесь к мастер-классу и получите практические инструменты для управления временем и делегирования задач.</p>
+            <button onclick="toggleModal()" class="bg-white text-blue-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Записаться сейчас
+            </button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">ФНС РФ</h3>
+                    <p class="text-gray-400">Мастер-класс по эффективному делегированию и тайм-менеджменту для сотрудников Федеральной налоговой службы.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Контакты</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-blue-400"></i>
+                            <span>education@fns.gov.ru</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-blue-400"></i>
+                            <span>+7 (495) 123-45-67</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Дополнительно</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Политика конфиденциальности</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Условия использования</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Другие обучающие программы</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2023 Федеральная налоговая служба РФ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle registration modal
+        function toggleModal() {
+            const modal = document.getElementById('registrationModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Toggle accordion items
+        function toggleAccordion(element) {
+            element.classList.toggle('active');
+            const icon = element.querySelector('i');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('registrationModal');
+            if (event.target == modal) {
+                modal.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
